@@ -78,7 +78,7 @@
             text-shadow: 0 0 8px rgba(255, 50, 85, 0.6);
         }
 
-        /* O botão secreto disfarçado no seu nome */
+        /* O botão secreto disfarçado no meu nome */
         .secret-trigger {
             background: none;
             border: none;
@@ -139,7 +139,7 @@
             text-align: left;
             margin-top: 25px;
             border-left: 4px solid #00d4ff;
-            box-shadow: inset 0 0 10px rgba(0, 0, 255, 0.1);
+            box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1);
             transition: all 1.5s ease;
         }
 
@@ -176,8 +176,8 @@
 <body>
 
     <div class="profile-container" id="container">
-        <!-- Foto de Perfil inicial (Gojo/padrão). Mude para o nome do seu arquivo local se preferir -->
-        <img src="https://discordapp.com&" alt="Foto de Perfil" class="profile-pic" id="profilePic">
+        <!-- Fotos locais para não quebrarem mais por causa do Discord -->
+        <img src="gojo-perfil.png" alt="Foto de Perfil" class="profile-pic" id="profilePic">
 
         <!-- Assinatura contendo o botão secreto interativo no nome "Yudi" -->
         <div class="top-signature" id="signature">
@@ -186,24 +186,22 @@
         
         <div class="subtitle" id="subtitle">Online</div>
 
-        <!-- O seu print inicial do Gojo -->
+        <!-- Imagem do feed -->
         <div class="screenshot-container" id="screenshotOuter">
-            <img src="https://discordapp.com&" alt="Print do Yudi" class="screenshot" id="screenshotImg">
+            <img src="gojo-feed.png" alt="Print do Yudi" class="screenshot" id="screenshotImg">
         </div>
 
         <!-- Suas Mensagens Alternáveis -->
         <div class="phrases-box" id="phrasesBox">
-            <!-- O JavaScript vai gerenciar o que aparece aqui dentro -->
+            <!-- O conteúdo inicial será inserido via script abaixo -->
         </div>
     </div>
 
     <script>
-        // Links das imagens para alternar
-        const imgGojoProfile = "https://discordapp.com&";
-        const imgGojoMain = "https://discordapp.com&";
-        
-        // Coloque aqui o nome do arquivo da imagem do Tadano na chuva que você salvou na pasta do site
-        const imgTadano = "sua-foto.png"; 
+        // Use nomes de arquivos locais que estejam na mesma pasta do seu site
+        const imgGojoProfile = "gojo-perfil.png";
+        const imgGojoMain = "gojo-feed.png";
+        const imgTadano = "tadano.png"; 
 
         let isSecretMode = false;
 
@@ -222,13 +220,12 @@
             <p class="typing-slow">🧠 "Algumas pessoas sofrem por serem felizes. Outras sofrem por já terem se cansado de explicar a dor."</p>
         `;
 
-        // Inicializa a página com as frases padrão
+        // Renderiza o texto padrão assim que a página abre
         document.getElementById('phrasesBox').innerHTML = defaultPhrases;
 
         function toggleSecretMode() {
             isSecretMode = !isSecretMode;
             
-            // Seleção dos elementos do HTML
             const body = document.body;
             const container = document.getElementById('container');
             const profilePic = document.getElementById('profilePic');
@@ -238,7 +235,6 @@
             const screenshotImg = document.getElementById('screenshotImg');
             const phrasesBox = document.getElementById('phrasesBox');
 
-            // Aplica ou remove as classes CSS de transição
             body.classList.toggle('secret-mode', isSecretMode);
             container.classList.toggle('secret-mode', isSecretMode);
             profilePic.classList.toggle('secret-mode', isSecretMode);
@@ -247,6 +243,16 @@
             screenshotOuter.classList.toggle('secret-mode', isSecretMode);
             phrasesBox.classList.toggle('secret-mode', isSecretMode);
 
-            // Troca o conteúdo dinamicamente com base no modo
             if (isSecretMode) {
-        
+                profilePic.src = imgTadano;
+                screenshotImg.src = imgTadano;
+                phrasesBox.innerHTML = secretPhrases;
+            } else {
+                profilePic.src = imgGojoProfile;
+                screenshotImg.src = imgGojoMain;
+                phrasesBox.innerHTML = defaultPhrases;
+            }
+        }
+    </script>
+</body>
+</html>
