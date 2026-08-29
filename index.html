@@ -17,6 +17,12 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            transition: background 1.5s ease;
+        }
+
+        /* Estado Alterado do Fundo (Modo Oculto) */
+        body.secret-mode {
+            background: linear-gradient(135deg, #0a0507, #160a0f);
         }
 
         /* Container principal com blur e neon azul */
@@ -30,6 +36,14 @@
             width: 100%;
             text-align: center;
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
+            transition: all 1.5s ease;
+        }
+
+        /* Estado Alterado do Container */
+        .profile-container.secret-mode {
+            background: rgba(22, 10, 15, 0.65);
+            border: 1px solid rgba(255, 50, 85, 0.15);
+            box-shadow: 0 0 35px rgba(255, 50, 85, 0.1);
         }
 
         /* Foto de perfil com borda neon */
@@ -41,15 +55,44 @@
             border: 3px solid #00d4ff;
             box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
             margin-bottom: 15px;
+            transition: all 1.5s ease;
         }
 
-        /* Assinatura de cima estilizada igual ao print */
+        .profile-pic.secret-mode {
+            border: 3px solid #ff3255;
+            box-shadow: 0 0 20px rgba(255, 50, 85, 0.4);
+        }
+
+        /* Assinatura de cima estilizada contendo o BOTÃO SECRETO */
         .top-signature {
             font-size: 13px;
             color: #00d4ff;
             margin-bottom: 5px;
             text-shadow: 0 0 5px rgba(0, 212, 255, 0.8);
             letter-spacing: 1px;
+            transition: all 1.5s ease;
+        }
+
+        .top-signature.secret-mode {
+            color: #ff3255;
+            text-shadow: 0 0 8px rgba(255, 50, 85, 0.6);
+        }
+
+        /* O botão secreto disfarçado no seu nome */
+        .secret-trigger {
+            background: none;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            cursor: pointer;
+            padding: 0;
+            text-shadow: inherit;
+            font-weight: bold;
+        }
+
+        .secret-trigger:focus {
+            outline: none;
         }
 
         .subtitle {
@@ -59,15 +102,27 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: bold;
+            transition: all 1.5s ease;
         }
 
-        /* Container do Print enviado */
+        .subtitle.secret-mode {
+            color: #ff3255;
+            text-shadow: 0 0 5px rgba(255, 50, 85, 0.3);
+        }
+
+        /* Container do Print */
         .screenshot-container {
             margin: 20px 0;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid rgba(0, 212, 255, 0.3);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: all 1.5s ease;
+        }
+
+        .screenshot-container.secret-mode {
+            border: 1px solid rgba(255, 50, 85, 0.25);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.7);
         }
 
         .screenshot {
@@ -76,7 +131,7 @@
             height: auto;
         }
 
-        /* Bloco com os seus textos */
+        /* Bloco com as frases */
         .phrases-box {
             background: rgba(0, 0, 0, 0.4);
             padding: 20px;
@@ -85,6 +140,13 @@
             margin-top: 25px;
             border-left: 4px solid #00d4ff;
             box-shadow: inset 0 0 10px rgba(0, 0, 255, 0.1);
+            transition: all 1.5s ease;
+        }
+
+        .phrases-box.secret-mode {
+            background: rgba(0, 0, 0, 0.55);
+            border-left: 4px solid #ff3255;
+            box-shadow: inset 0 0 15px rgba(255, 0, 50, 0.05);
         }
 
         .phrases-box p {
@@ -94,38 +156,97 @@
             color: #e2e8f0;
         }
 
-        .phrases-box p:first-child {
-            margin-top: 0;
+        /* Estilos dinâmicos para o texto do desabafo */
+        .vent-text {
+            color: #f1f5f9;
+            font-style: italic;
+            border-bottom: 1px dashed rgba(255, 50, 85, 0.2);
+            padding-bottom: 10px;
         }
 
-        .phrases-box p:last-child {
-            margin-bottom: 0;
+        .typing-fast { animation: fadeInText 1.5s ease-out forwards; }
+        .typing-slow { animation: fadeInText 4s ease-out forwards; color: #94a3b8; }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="profile-container">
-        <!-- Foto de Perfil temporária usando o mesmo print caso queira, ou mude para sua foto -->
-        <img src="https://cdn.discordapp.com/attachments/1530693035472584851/1538664657190125659/HOztCk8WsAA6uZG.jpg?ex=6a8623a1&is=6a84d221&hm=54c71a12d931db09af5b5ee92c7d433355605304c50e8fbbf246a9de512def80&" alt="Foto de Perfil" class="profile-pic">
+    <div class="profile-container" id="container">
+        <!-- Foto de Perfil inicial (Gojo/padrão). Mude para o nome do seu arquivo local se preferir -->
+        <img src="https://discordapp.com&" alt="Foto de Perfil" class="profile-pic" id="profilePic">
 
-        <!-- Linha decorativa idêntica à do print -->
-        <div class="top-signature">†•.═════•★ Yudi ★•═════.•†</div>
+        <!-- Assinatura contendo o botão secreto interativo no nome "Yudi" -->
+        <div class="top-signature" id="signature">
+            †•.═════•★ <button class="secret-trigger" onclick="toggleSecretMode()">Yudi</button> ★•═════.•†
+        </div>
         
-        <div class="subtitle">Online</div>
+        <div class="subtitle" id="subtitle">Online</div>
 
-        <!-- O seu print do Gojo carregando direto do link do Discord -->
-        <div class="screenshot-container">
-            <img src="https://cdn.discordapp.com/attachments/1530693035472584851/1538658840893984798/Screenshot_20260816-1810004.jpg?ex=6a861e36&is=6a84ccb6&hm=61c2345814b1b0a8e45695d403d2889bf7f10c00b846d859cdc553556ff75117&" alt="Print do Yudi" class="screenshot">
+        <!-- O seu print inicial do Gojo -->
+        <div class="screenshot-container" id="screenshotOuter">
+            <img src="https://discordapp.com&" alt="Print do Yudi" class="screenshot" id="screenshotImg">
         </div>
 
-        <!-- Suas Mensagens -->
-        <div class="phrases-box">
-            <p>⚡ "Do 0 ao 1 e do 1 ao infinito"</p>
-            <p>✝️ "A maior prova de amor foi na cruz"</p>
-            <p>🧠 "Não fique satisfeito com coisas que recebeu de mão beijada, mereça, não existe algo melhor do que conseguir e saber que você mereceu"</p>
+        <!-- Suas Mensagens Alternáveis -->
+        <div class="phrases-box" id="phrasesBox">
+            <!-- O JavaScript vai gerenciar o que aparece aqui dentro -->
         </div>
     </div>
 
-</body>
-</html>
+    <script>
+        // Links das imagens para alternar
+        const imgGojoProfile = "https://discordapp.com&";
+        const imgGojoMain = "https://discordapp.com&";
+        
+        // Coloque aqui o nome do arquivo da imagem do Tadano na chuva que você salvou na pasta do site
+        const imgTadano = "sua-foto.png"; 
+
+        let isSecretMode = false;
+
+        // Estrutura das frases padrão (Azul)
+        const defaultPhrases = `
+            <p>⚡ "Do 0 ao 1 e do 1 ao infinito"</p>
+            <p>✝️ "A maior prova de amor foi na cruz"</p>
+            <p>🧠 "Não fique satisfeito com coisas que recebeu de mão beijada, mereça, não existe algo melhor do que conseguir e saber que você mereceu"</p>
+        `;
+
+        // Estrutura do desabafo (Vermelho)
+        const secretPhrases = `
+            <p class="vent-text">"Não sou totalmente talentoso, não sou perfeito, eu me esforço mais do que você imagina, é só a sua inveja que está te cegando do meu verdadeiro esforço..."</p>
+            <p class="typing-fast">💧 <em>"Choros de madrugadas por não conseguir desabafar, não ter um porto seguro, sempre ter que parecer inabalável e traumas..."</em></p>
+            <p class="typing-fast">🥀 "Mas mesmo que você também tenha traumas e decepções isso não justifica as suas atitudes de merda com quem sempre te ajuda e é alguém bom com você mesmo você não sendo com essa pessoa... Comigo..."</p>
+            <p class="typing-slow">🧠 "Algumas pessoas sofrem por serem felizes. Outras sofrem por já terem se cansado de explicar a dor."</p>
+        `;
+
+        // Inicializa a página com as frases padrão
+        document.getElementById('phrasesBox').innerHTML = defaultPhrases;
+
+        function toggleSecretMode() {
+            isSecretMode = !isSecretMode;
+            
+            // Seleção dos elementos do HTML
+            const body = document.body;
+            const container = document.getElementById('container');
+            const profilePic = document.getElementById('profilePic');
+            const signature = document.getElementById('signature');
+            const subtitle = document.getElementById('subtitle');
+            const screenshotOuter = document.getElementById('screenshotOuter');
+            const screenshotImg = document.getElementById('screenshotImg');
+            const phrasesBox = document.getElementById('phrasesBox');
+
+            // Aplica ou remove as classes CSS de transição
+            body.classList.toggle('secret-mode', isSecretMode);
+            container.classList.toggle('secret-mode', isSecretMode);
+            profilePic.classList.toggle('secret-mode', isSecretMode);
+            signature.classList.toggle('secret-mode', isSecretMode);
+            subtitle.classList.toggle('secret-mode', isSecretMode);
+            screenshotOuter.classList.toggle('secret-mode', isSecretMode);
+            phrasesBox.classList.toggle('secret-mode', isSecretMode);
+
+            // Troca o conteúdo dinamicamente com base no modo
+            if (isSecretMode) {
+        
